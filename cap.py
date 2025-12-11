@@ -5,9 +5,9 @@ from pyrogram.enums import MessageMediaType
 # ============================
 # CONFIG
 # ============================
-API_ID = 1234567                      # ← YOUR API ID
-API_HASH = "your_api_hash_here"       # ← YOUR API HASH
-BOT_TOKEN = "your_bot_token_here"     # ← YOUR BOT TOKEN
+API_ID = 35292658                      # ← YOUR API ID
+API_HASH = "a14fdc9ed8e1456c9570381024954d0b"       # ← YOUR API HASH
+BOT_TOKEN = "8257600572:AAFVmlwEDiEy-AFzXN94XpUmsSRe6aXMxhw"     # ← YOUR BOT TOKEN
 
 # How many old messages to fetch when recording starts
 DEFAULT_LIMIT = 150
