@@ -9,9 +9,9 @@ logging.basicConfig(
 )
 
 # Replace with your actual credentials
-API_ID = "your_api_key_here"
-API_HASH = ""
-BOT_TOKEN = ""
+API_ID = "35292658"
+API_HASH = "a14fdc9ed8e1456c9570381024954dOb"
+BOT_TOKEN = "8257600572"
 
 app = Client("caption_recorder", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
