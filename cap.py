@@ -9,7 +9,7 @@ logging.basicConfig(
 )
 
 # Replace with your actual credentials
-API_ID = API_HERE
+API_ID = "your_api_key_here"
 API_HASH = ""
 BOT_TOKEN = ""
 
