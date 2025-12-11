@@ -13,7 +13,7 @@ API_ID = 35292658
 API_HASH = "a14fdc9ed8e1456c9570381024954dOb"
 BOT_TOKEN = "8257600572:AAFVmlwEDiEy-AFzXN94XpUmsSRe6aXMxhw"
 
-app = Client("caption_recorder", api_id=35292658, api_hash=a14fdc9ed8e1456c9570381024954dOb, bot_token=8257600572:AAFVmlwEDiEy-AFzXN94XpUmsSRe6aXMxhw)
+app = Client("caption_recorder", api_id=35292658, api_hash="a14fdc9ed8e1456c9570381024954dOb", bot_token="8257600572:AAFVmlwEDiEy-AFzXN94XpUmsSRe6aXMxhw")
 
 # Store recorded captions and links
 # { chat_id: [(caption, link), (caption, link), ...] }
