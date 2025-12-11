@@ -9,11 +9,10 @@ logging.basicConfig(
 )
 
 # Replace with your actual credentials
-import os
+API_ID = API_HERE
+API_HASH = ""
+BOT_TOKEN = ""
 
-API_ID = int(os.getenv("API_ID"))
-API_HASH = os.getenv("API_HASH")
-BOT_TOKEN = os.getenv("BOT_TOKEN")
 app = Client("caption_recorder", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
 # Store recorded captions and links
