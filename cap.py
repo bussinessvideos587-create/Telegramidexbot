@@ -8,11 +8,11 @@ logging.basicConfig(
     level=logging.INFO,
 )
 
-API_ID = API_HERE
-API_HASH = ""
-BOT_TOKEN = ""
+API_ID = 35292658
+API_HASH = "a14fdc9ed8e1456c9570381024954d0b"
+BOT_TOKEN = "8257600572:AAFVmlwEDiEy-AFzXN94XpUmsSRe6aXMxhw"
 
-app = Client("caption_recorder", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
+app = Client("caption_recorder", api_id=35292658, api_hash="a14fdc9ed8e1456c9570381024954d0b", bot_token="8257600572:AAFVmlwEDiEy-AFzXN94XpUmsSRe6aXMxhw")
 
 # Store recorded captions and links
 channel_posts = {}
