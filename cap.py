@@ -6,7 +6,7 @@ from pyrogram.errors import FloodWait, PeerIdInvalid, ChannelPrivate, ChatAdminR
 
 logging.basicConfig(level=logging.INFO)
 
-API_ID = a14fdc9ed8e1456c9570381024954d0b
+API_ID = 35292658
 API_HASH = "a14fdc9ed8e1456c9570381024954d0b"
 BOT_TOKEN = "8257600572:AAFVmlwEDiEy-AFzXN94XpUmsSRe6aXMxhw"
 
