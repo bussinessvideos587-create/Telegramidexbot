@@ -6,9 +6,9 @@ from pyrogram.errors import FloodWait, PeerIdInvalid, ChannelPrivate, ChatAdminR
 
 logging.basicConfig(level=logging.INFO)
 
-API_ID = 12345
-API_HASH = "your_hash"
-BOT_TOKEN = "your_token"
+API_ID = a14fdc9ed8e1456c9570381024954d0b
+API_HASH = "a14fdc9ed8e1456c9570381024954d0b"
+BOT_TOKEN = "8257600572:AAFVmlwEDiEy-AFzXN94XpUmsSRe6aXMxhw"
 
 app = Client("scraper_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
