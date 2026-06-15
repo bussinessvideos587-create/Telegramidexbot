@@ -93,8 +93,8 @@ async def start_recording(client, message):
     except Exception:
         pass  # Fallback if bot isn't in destination target yet
 
-    # Safely look for sub-topic ID in Pyrogram
-    topic_id = message.topic.id if message.topic else None
+    # Safely get the thread ID if it exists using getattr
+    topic_id = getattr(message, "message_thread_id", None)
 
     await message.reply_text(
         f"Recording started for channel `{channel_id}` with content type `{content_type}`.",
@@ -172,8 +172,8 @@ async def finish_recording(client, message):
 
     final_text = "\n".join(lines)
 
-    # Safely get sub-topic ID in Pyrogram 
-    topic_id = message.topic.id if message.topic else None
+    # Safely get the thread ID if it exists using getattr
+    topic_id = getattr(message, "message_thread_id", None)
 
     await send_long_message(
         client,
@@ -192,3 +192,4 @@ async def finish_recording(client, message):
 
 
 app.run()
+
