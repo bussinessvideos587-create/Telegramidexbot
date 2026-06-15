@@ -65,7 +65,7 @@ async def send_long_message(client, chat_id, text, parse_mode=None):
 
 
 # --- Start recording command (/rec) ---
-@app.on_message(filters.command("rec") & filters.private)
+@app.on_message(filters.command("rec") & (filters.private | filters.channel | filters.group))
 async def start_recording(client, message):
     args = message.text.split()
     if len(args) < 3:
@@ -136,7 +136,7 @@ async def handle_channel_post(client, message):
 
 
 # --- Done command (/done) ---
-@app.on_message(filters.command("done") & filters.private)
+@app.on_message(filters.command("done") & (filters.private | filters.channel | filters.group))
 async def finish_recording(client, message):
     args = message.text.split()
     if len(args) < 2:
