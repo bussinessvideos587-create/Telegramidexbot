@@ -85,9 +85,6 @@ async def start_recording(client, message):
     # Store configurations map
     channel_posts[channel_id] = {"type": content_type, "posts": []}
 
-    # If used in a forum group topic, reply back to that exact topic thread natively
-    topic_id = message.message_thread_id if message.message_thread_id else None
-
     try:
         await client.send_message(
             chat_id=channel_id,
@@ -96,9 +93,12 @@ async def start_recording(client, message):
     except Exception:
         pass  # Fallback if bot isn't in destination target yet
 
+    # Safely look for sub-topic ID in Pyrogram
+    topic_id = message.topic.id if message.topic else None
+
     await message.reply_text(
         f"Recording started for channel `{channel_id}` with content type `{content_type}`.",
-        reply_to_message_id=message.id
+        reply_to_message_id=topic_id if topic_id else message.id
     )
 
 
@@ -172,8 +172,8 @@ async def finish_recording(client, message):
 
     final_text = "\n".join(lines)
 
-    # Route output directly back natively into the active forum topic thread if needed
-    topic_id = message.message_thread_id if message.message_thread_id else None
+    # Safely get sub-topic ID in Pyrogram 
+    topic_id = message.topic.id if message.topic else None
 
     await send_long_message(
         client,
@@ -185,11 +185,10 @@ async def finish_recording(client, message):
 
     await message.reply_text(
         f"Summary of {len(posts_data)} posts posted to channel `{channel_id}`.",
-        reply_to_message_id=message.id
+        reply_to_message_id=topic_id if topic_id else message.id
     )
 
     del channel_posts[channel_id]
 
 
 app.run()
-
