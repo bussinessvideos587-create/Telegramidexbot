@@ -20,17 +20,9 @@ app = Client(
     bot_token=BOT_TOKEN
 )
 
-# Structure:
-# channel_posts = {
-#    channel_id: {
-#        "type": "video" / "pdf" / "text" / "all",
-#        "posts": [(caption, link), ...]
-#    }
-# }
+# Global tracker dictionary
 channel_posts = {}
-
 VALID_TYPES = {"video", "pdf", "text", "all"}
-
 MAX_LEN = 4096
 
 # --- Helper: Build tg link ---
@@ -42,7 +34,7 @@ def make_tg_link(chat_id: int, message_id: int) -> str:
 
 
 # --- Helper: Send long message safely ---
-async def send_long_message(client, chat_id, text, parse_mode=None):
+async def send_long_message(client, chat_id, text, reply_to_message_id=None, parse_mode=None):
     buffer = ""
     for line in text.split("\n"):
         if len(buffer) + len(line) + 1 > MAX_LEN:
@@ -50,7 +42,8 @@ async def send_long_message(client, chat_id, text, parse_mode=None):
                 chat_id=chat_id,
                 text=buffer,
                 disable_web_page_preview=True,
-                parse_mode=parse_mode
+                parse_mode=parse_mode,
+                reply_to_message_id=reply_to_message_id
             )
             buffer = ""
         buffer += line + "\n"
@@ -60,7 +53,8 @@ async def send_long_message(client, chat_id, text, parse_mode=None):
             chat_id=chat_id,
             text=buffer,
             disable_web_page_preview=True,
-            parse_mode=parse_mode
+            parse_mode=parse_mode,
+            reply_to_message_id=reply_to_message_id
         )
 
 
@@ -88,19 +82,28 @@ async def start_recording(client, message):
         )
         return
 
+    # Store configurations map
     channel_posts[channel_id] = {"type": content_type, "posts": []}
 
-    await client.send_message(
-        chat_id=channel_id,
-        text=f"🟢 **Recording started for {content_type} posts.**",
-    )
+    # If used in a forum group topic, reply back to that exact topic thread natively
+    topic_id = message.message_thread_id if message.message_thread_id else None
+
+    try:
+        await client.send_message(
+            chat_id=channel_id,
+            text=f"🟢 **Recording started for {content_type} posts.**",
+        )
+    except Exception:
+        pass  # Fallback if bot isn't in destination target yet
+
     await message.reply_text(
-        f"Recording started for channel `{channel_id}` with content type `{content_type}`."
+        f"Recording started for channel `{channel_id}` with content type `{content_type}`.",
+        reply_to_message_id=message.id
     )
 
 
-# --- Handle media in monitored channels ---
-@app.on_message(filters.channel & (filters.text | filters.video | filters.document))
+# --- Handle media in monitored channels or group environments ---
+@app.on_message((filters.channel | filters.group) & (filters.text | filters.video | filters.document))
 async def handle_channel_post(client, message):
     if message.chat.id not in channel_posts:
         return
@@ -114,8 +117,8 @@ async def handle_channel_post(client, message):
         if not message.document:
             return
         if (
-            message.document.mime_type != "application/pdf"
-            and not message.document.file_name.lower().endswith(".pdf")
+            not getattr(message.document, "mime_type", "").startswith("application/pdf")
+            and not getattr(message.document, "file_name", "").lower().endswith(".pdf")
         ):
             return
 
@@ -155,7 +158,6 @@ async def finish_recording(client, message):
         return
 
     posts_data = data["posts"]
-
     lines = ["📝 **Recorded Posts (Caption and Link)** 🔗", ""]
 
     for caption, link in posts_data:
@@ -170,18 +172,24 @@ async def finish_recording(client, message):
 
     final_text = "\n".join(lines)
 
+    # Route output directly back natively into the active forum topic thread if needed
+    topic_id = message.message_thread_id if message.message_thread_id else None
+
     await send_long_message(
         client,
         chat_id=channel_id,
         text=final_text,
+        reply_to_message_id=topic_id,
         parse_mode=ParseMode.MARKDOWN
     )
 
     await message.reply_text(
-        f"Summary of {len(posts_data)} posts posted to channel `{channel_id}`."
+        f"Summary of {len(posts_data)} posts posted to channel `{channel_id}`.",
+        reply_to_message_id=message.id
     )
 
     del channel_posts[channel_id]
 
 
 app.run()
+
